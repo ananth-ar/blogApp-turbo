@@ -1,0 +1,14 @@
+{
+  "extends": "@repo/typescript-config/tsconfig.node.json",
+  "compilerOptions": {
+    "baseUrl": "",
+    "jsx": "react",
+    "outDir": "dist",
+    "tsBuildInfoFile": "tsconfig.tsbuildinfo"
+  },
+  "include": [""],
+  "exclude": ["dist", "build"],
+  "ts-node": {
+    "swc": true
+  }
+}
