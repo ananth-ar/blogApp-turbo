@@ -1,24 +1,61 @@
-import express from "express";
+import express, { Request, Response } from "express";
+import http from "http";
+import { Server } from "socket.io";
 import cors from "cors";
 import { prisma } from "database";
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: "*" } });
 
-app.use(
-  cors({
-    origin: "*",
-  })
-);
-
+app.use(cors());
 app.use(express.json());
-app.get("/", async (req: any, res: any) => {
-  const users = await prisma.user.findMany();
-  console.log("in server ", users);
-  res.send("Hello World!");
+
+app.use("/notifications", async (req: Request, res: Response) => {
+  const { notificationCount, targetUserId } = req.body;
+
+  const user = await prisma.user.findUnique({
+    where: { id: targetUserId },
+  });
+  if (user) {
+    io.to(user.username).emit("avaliabeNotification", notificationCount);
+    res.json({ message: "Notification sent", notificationCount });
+  }
 });
 
-const PORT = process.env.PORT || 9999;
+io.on("connection", (socket) => {
+  console.log(`new socket connection ${socket.id} `);
 
-app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`);
+  socket.on("authenticated", async (username) => {
+    socket.join(username);
+    console.log(`User joined room ${username}`);
+
+    const user = await prisma.user.findUnique({
+      where: { username },
+    });
+
+    if (user) {
+      const notificationCount = await prisma.notification.count({
+        where: {
+          targetUserId: user.id,
+        },
+      });
+
+      socket.emit("avaliabeNotification", notificationCount);
+    }
+  });
+
+  socket.on("disconnect", (socket) => {
+    console.log(`socket disconnected ${socket} `);
+  });
+});
+
+const port = process.env.NODE_ENV === "production" ? process.env.PORT : 5000;
+
+server.listen(port, () => {
+  console.log(
+    `${
+      process.env.NODE_ENV === "production" ? "prod" : "dev"
+    } server listening on port ${port}`
+  );
 });
