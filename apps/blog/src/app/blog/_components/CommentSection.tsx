@@ -14,6 +14,7 @@ interface Props {
 
 const CommentSection = ({ comments, postId, userId }: Props) => {
   const [newComment, setNewComment] = useState(false);
+ 
   const router = useRouter();
 
   const handleComment = () => {

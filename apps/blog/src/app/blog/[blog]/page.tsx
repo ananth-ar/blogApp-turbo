@@ -7,7 +7,8 @@ import Link from "next/link";
 import BookMarkPost from "../_components/BookMarkPost";
 import { getUserIdAction } from "../../../lib/actions/userActions";
 import { authOptions } from "../../../lib/auth";
-
+import { unstable_cache } from "next/cache";
+import { Tags } from "lucide-react";
 
 interface Post {
   id: string;
@@ -37,8 +38,6 @@ export type Comment = {
   replies: Comment[];
 };
 
-
-
 const Blog = async ({ params: { blog } }: Props) => {
   const sessionUser = await getServerSession(authOptions);
 
@@ -52,7 +51,7 @@ const Blog = async ({ params: { blog } }: Props) => {
 
   if (sessionUser) {
     userId = await getUserIdAction(sessionUser.user.username!);
-    isLiked = post.likes.some((user:any) => user.id === userId);
+    isLiked = post.likes.some((user: any) => user.id === userId);
 
     const follower = await prisma.user.findUnique({
       where: { username: sessionUser.user.username! },
@@ -190,7 +189,13 @@ async function getCommentsForPost(postId: string) {
   return comments;
 }
 
- async function isPostBookmarked(username: string, postSlug: string) {
+async function cachedCommentsForPost(postId: string) {
+  return unstable_cache(async () => getCommentsForPost(postId), [postId], {
+    tags: ["comments"],
+  });
+}
+
+async function isPostBookmarked(username: string, postSlug: string) {
   if (!username) return false;
   const user = await prisma.user.findUnique({
     where: { username },

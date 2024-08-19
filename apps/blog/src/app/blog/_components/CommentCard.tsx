@@ -4,7 +4,10 @@ import React, { useState } from "react";
 import { Comment } from "../[blog]/page";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { editCommentAction, replyToCommentAction } from "../../../lib/actions/postActions";
+import {
+  editCommentAction,
+  replyToCommentAction,
+} from "../../../lib/actions/postActions";
 
 interface Props {
   postId: string;
@@ -20,7 +23,7 @@ const CommentCard = ({ comment, postId, userId }: Props) => {
   const [replyText, setReplyText] = useState("");
   const router = useRouter();
 
-  const { mutateAsync: replyToComment } = useMutation({
+  const { mutateAsync: replyToComment, isPending: isreply } = useMutation({
     mutationFn: () =>
       replyToCommentAction(replyText, userId, postId, comment.id),
     mutationKey: ["replyToCommentAction"],
@@ -30,7 +33,7 @@ const CommentCard = ({ comment, postId, userId }: Props) => {
     },
   });
 
-  const { mutateAsync: editComment } = useMutation({
+  const { mutateAsync: editComment, isPending: iseditcomment } = useMutation({
     mutationFn: () => editCommentAction(editedText, comment.id),
     mutationKey: ["editCommentAction"],
     onSuccess: () => {
@@ -67,7 +70,7 @@ const CommentCard = ({ comment, postId, userId }: Props) => {
               className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
               onClick={() => editComment()}
             >
-              Save
+              {iseditcomment ? "saving..." : "Save"}
             </button>
             <button
               className="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
@@ -125,7 +128,7 @@ const CommentCard = ({ comment, postId, userId }: Props) => {
               className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
               onClick={() => replyToComment()}
             >
-              Submit Reply
+              {isreply ? "saving..." : "Save"}
             </button>
             <button
               className="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"

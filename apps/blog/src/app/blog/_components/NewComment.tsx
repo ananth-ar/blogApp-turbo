@@ -35,7 +35,7 @@ const NewComment = ({ postId, userId, setNewComment }: Props) => {
           className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
           onClick={async () => await commentToPost()}
         >
-          Save
+          {isPending ? "saving..." : "Save"}
         </button>
         <button
           className="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"

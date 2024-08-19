@@ -5,6 +5,7 @@ import { deleteImage, uploadImage } from "../utiles/filesaver";
 import { isAuthenicated } from "../utiles/authHelper";
 import { generateUniqueSlug, slugify } from "../utiles/helper";
 import { createNotificationAction } from "./notificationActions";
+import { revalidateTag } from "next/cache";
 
 export async function createPost(formData: FormData) {
   const user = await isAuthenicated();
@@ -24,9 +25,7 @@ export async function createPost(formData: FormData) {
 
   const slug = await generateUniqueSlug(postData.title);
 
-
-
-  const result = await prisma.$transaction(async (prisma:any) => {
+  const result = await prisma.$transaction(async (prisma: any) => {
     const newPost = await prisma.post.create({
       data: {
         author: {
@@ -105,7 +104,7 @@ export async function likePost(userId: string, postId: string) {
       include: { PostLikes: true },
     });
 
-    const hasLiked = user?.PostLikes.some((post:any) => post.id === postId);
+    const hasLiked = user?.PostLikes.some((post: any) => post.id === postId);
 
     if (hasLiked) {
       await prisma.user.update({
@@ -185,6 +184,8 @@ export async function commentToPostAction(
     postId: postId,
     comment: text,
   });
+
+  revalidateTag("comments");
 }
 
 export async function replyToCommentAction(
@@ -231,6 +232,8 @@ export async function replyToCommentAction(
     targetUserId: comment?.User.id!,
     comment: text,
   });
+
+  revalidateTag("comments");
 }
 
 export async function editCommentAction(text: string, commentId: string) {
@@ -240,6 +243,7 @@ export async function editCommentAction(text: string, commentId: string) {
       text,
     },
   });
+  revalidateTag("comments");
 }
 
 export async function addBookMarkAction(username: string, postSlug: string) {
@@ -267,7 +271,7 @@ export async function removeBookMarkAction(username: string, postSlug: string) {
 const LIMIT = 5;
 
 export async function getPopularPosts({ pageParam = 0 }) {
-  const posts = await prisma.$transaction(async (tx:any) => {
+  const posts = await prisma.$transaction(async (tx: any) => {
     const popularPosts = await tx.post.findMany({
       take: LIMIT,
       skip: pageParam,
@@ -308,7 +312,7 @@ export async function getPopularPosts({ pageParam = 0 }) {
 }
 
 export async function getUserPosts({ pageParam = 0 }, userId: string) {
-  const posts = await prisma.$transaction(async (tx:any) => {
+  const posts = await prisma.$transaction(async (tx: any) => {
     const popularPosts = await tx.post.findMany({
       where: { authorId: userId },
       take: LIMIT,

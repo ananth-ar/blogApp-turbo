@@ -2,14 +2,12 @@ import Home from "../components/Home";
 import { Button } from "../components/ui/button";
 import {
   Command,
-  CommandDialog,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
   CommandSeparator,
-  CommandShortcut,
 } from "../components/ui/command";
 import {
   Card,
