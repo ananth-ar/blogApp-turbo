@@ -4,6 +4,7 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { socket } from "../lib/service/socket";
+import { ToggleTheme } from "./ToggleTheme";
 
 const NavBar = () => {
   const [notification, setNotification] = useState();
@@ -39,6 +40,7 @@ const NavBar = () => {
       <Link className="text-zinc-200" href="/editor">
         write
       </Link>
+      <ToggleTheme/>
     </div>
   );
 };
