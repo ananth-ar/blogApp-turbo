@@ -41,8 +41,16 @@ export type Comment = {
 const Blog = async ({ params: { blog } }: Props) => {
   const sessionUser = await getServerSession(authOptions);
 
-  const post = await getPost(blog);
-  const comments: Comment[] = await getCommentsForPost(post?.id!);
+  const post = await cachedPost(blog);
+  const comments: Comment[] = await cachedCommentsForPost(post?.id!);
+  const followStatus = await cachedFollowStatus(
+    sessionUser?.user.username!,
+    post.authorId
+  );
+  const bookedmarked = await cachedBookMark(
+    sessionUser?.user.username!,
+    post.slug
+  );
 
   let isSame: boolean;
   let isFollows: boolean;
@@ -52,31 +60,13 @@ const Blog = async ({ params: { blog } }: Props) => {
   if (sessionUser) {
     userId = await getUserIdAction(sessionUser.user.username!);
     isLiked = post.likes.some((user: any) => user.id === userId);
-
-    const follower = await prisma.user.findUnique({
-      where: { username: sessionUser.user.username! },
-      include: {
-        following: {
-          where: { id: post.authorId },
-          select: { id: true },
-        },
-      },
-    });
-
-    isFollows = follower?.following.length === 1;
+    isFollows = followStatus?.following.length === 1;
     isSame = post.author.username === sessionUser?.user.username;
   } else {
     isFollows = false;
     isSame = false;
     isLiked = false;
   }
-
-  const bookedmarked = await isPostBookmarked(
-    sessionUser?.user.username!,
-    post.slug
-  );
-
-  console.log(post.author.image);
 
   return (
     <>
@@ -157,6 +147,12 @@ async function getPost(postId: string) {
   }
 }
 
+async function cachedPost(postId: string) {
+  return unstable_cache(async () => getPost(postId), [postId], {
+    tags: ["post"],
+  })();
+}
+
 async function getCommentsForPost(postId: string) {
   const comments = await prisma.comment.findMany({
     where: {
@@ -186,13 +182,35 @@ async function getCommentsForPost(postId: string) {
       createdAt: "desc",
     },
   });
-  return comments;
+  return comments as Comment[];
 }
 
 async function cachedCommentsForPost(postId: string) {
   return unstable_cache(async () => getCommentsForPost(postId), [postId], {
     tags: ["comments"],
+  })();
+}
+
+async function isFollowing(username: string, authorId: string) {
+  return await prisma.user.findUnique({
+    where: { username },
+    include: {
+      following: {
+        where: { id: authorId },
+        select: { id: true },
+      },
+    },
   });
+}
+
+async function cachedFollowStatus(username: string, authorId: string) {
+  return unstable_cache(
+    async () => isFollowing(username, authorId),
+    [username, authorId],
+    {
+      tags: ["followStatus"],
+    }
+  )();
 }
 
 async function isPostBookmarked(username: string, postSlug: string) {
@@ -209,4 +227,14 @@ async function isPostBookmarked(username: string, postSlug: string) {
 
   console.log("checking whether bookemarked ", user);
   return user?.bookmarks.length! > 0 || false;
+}
+
+async function cachedBookMark(username: string, postSlug: string) {
+  return unstable_cache(
+    async () => isPostBookmarked(username, postSlug),
+    [username, postSlug],
+    {
+      tags: ["bookmark"],
+    }
+  )();
 }

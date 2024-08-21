@@ -115,6 +115,8 @@ export async function likePost(userId: string, postId: string) {
           },
         },
       });
+
+      revalidateTag("post");
       return { liked: false };
     } else {
       await prisma.user.update({
@@ -141,6 +143,8 @@ export async function likePost(userId: string, postId: string) {
         targetUserId: author.authorId,
         postId: postId,
       });
+
+      revalidateTag("post");
       return { liked: true };
     }
   } catch (error) {
@@ -255,6 +259,7 @@ export async function addBookMarkAction(username: string, postSlug: string) {
       },
     },
   });
+  revalidateTag("bookmark");
 }
 
 export async function removeBookMarkAction(username: string, postSlug: string) {
@@ -266,6 +271,7 @@ export async function removeBookMarkAction(username: string, postSlug: string) {
       },
     },
   });
+  revalidateTag("bookmark");
 }
 
 const LIMIT = 5;

@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { isAuthenicated } from "../../../lib/utiles/authHelper";
 import ProfileEditForm from "./_components/ProfileEditForm";
 import { prisma } from "database";
@@ -5,10 +6,7 @@ import { prisma } from "database";
 export default async function EditProfilePage() {
   const sessionData = await isAuthenicated();
 
-  const user = await prisma.user.findUnique({
-    where: { username: sessionData.username! },
-    include: { SocialMedia: true },
-  });
+  const user = await cachedUser(sessionData.username!);
 
   if (!user) {
     return <div>User not found.</div>;
@@ -20,4 +18,17 @@ export default async function EditProfilePage() {
       <ProfileEditForm user={user} />
     </div>
   );
+}
+
+async function getUser(username: string) {
+  return await prisma.user.findUnique({
+    where: { username },
+    include: { SocialMedia: true },
+  });
+}
+
+async function cachedUser(username: string) {
+  return unstable_cache(async () => getUser(username), [username], {
+    tags: ["editUser"],
+  })();
 }

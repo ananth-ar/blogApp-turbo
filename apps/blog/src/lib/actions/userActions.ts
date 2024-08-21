@@ -3,6 +3,7 @@
 import { prisma } from "database";
 import { createNotificationAction } from "./notificationActions";
 import { FormState } from "../../app/setting/edit-profile/_components/ProfileEditForm";
+import { revalidateTag } from "next/cache";
 
 export async function getUserIdAction(username: string) {
   if (username) {
@@ -37,6 +38,7 @@ export async function updateProfile(prevState: FormState, formData: FormData) {
       },
     });
 
+    revalidateTag("editUser");
     return { success: true, message: "Profile updated successfully!" };
   } catch (error) {
     console.error("Error updating profile:", error);
@@ -63,6 +65,8 @@ export async function userFollow(username: string, authorId: string) {
       username: username,
       targetUserId: authorId,
     });
+
+    revalidateTag("followStatus");
 
     return updatedUser;
   } catch (error) {
@@ -103,6 +107,9 @@ export async function userUnfollow(username: string, authorId: string) {
         },
       },
     });
+
+    revalidateTag("followStatus");
+
     return updatedUser;
   } catch (error) {
     console.error("Error unfollowing user:", error);
