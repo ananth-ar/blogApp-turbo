@@ -40,7 +40,12 @@ const NavBar = () => {
       <Link className="text-zinc-200" href="/editor">
         write
       </Link>
-      <ToggleTheme/>
+      {/* <ToggleTheme/> */}
+      <input
+        type="checkbox"
+        value="synthwave"
+        className="toggle theme-controller"
+      />
     </div>
   );
 };
