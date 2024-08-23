@@ -6,6 +6,7 @@ import SearchBar from "../components/SearchBar";
 import AuthProvider from "../providers/AuthProvider";
 import ReactQueryProvider from "../providers/ReactQueryProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
+import ClientThemeWrapper from "@/providers/ClientThemeWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,21 +23,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-      
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          // enableSystem
-          disableTransitionOnChange
-        >
-          <ReactQueryProvider>
-            <AuthProvider>
-              <NavBar />
-              <SearchBar />
-
-              {children}
-            </AuthProvider>
-          </ReactQueryProvider>
+        <ThemeProvider>
+          <ClientThemeWrapper>
+            <ReactQueryProvider>
+              <AuthProvider>
+                <NavBar />
+                <SearchBar />
+                {children}
+              </AuthProvider>
+            </ReactQueryProvider>
+          </ClientThemeWrapper>
         </ThemeProvider>
       </body>
     </html>
