@@ -21,14 +21,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {" "}
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="light"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <body className={inter.className}>
+      <body className={inter.className}>
+      
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          // enableSystem
+          disableTransitionOnChange
+        >
           <ReactQueryProvider>
             <AuthProvider>
               <NavBar />
@@ -37,8 +37,8 @@ export default function RootLayout({
               {children}
             </AuthProvider>
           </ReactQueryProvider>
-        </body> 
-      </ThemeProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
