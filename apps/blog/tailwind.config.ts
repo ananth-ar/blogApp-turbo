@@ -3,16 +3,49 @@ import daisyui from "daisyui";
 const daisyuiColorObj = require("daisyui/src/theming/index");
 
 const config = {
+
   daisyui: {
-    themes: ["light", "dark", "cupcake"],
+    themes: [
+      {
+        light: {
+          ...require("daisyui/src/theming/themes")["light"],
+          primary: "black",
+          secondary: "hsl(210 40% 96.1%)",
+          accent: "hsl(210 40% 96.1%)",
+          neutral: "hsl(0 0% 100%)",
+          "base-100": "#ffff", // used in background and others
+          "base-content": "#0000", // used in text and other, need to be contrast to base-100
+          info: "hsl(221.2 83.2% 53.3%)",
+          success: "hsl(142.1 76.2% 36.3%)",
+          warning: "hsl(48 96% 53%)",
+          error: "hsl(346.8 77.2% 49.8%)",
+        },
+      },
+      {
+        dark: {
+          ...require("daisyui/src/theming/themes")["dark"],
+          primary: "hsl(210 40% 98%)",
+          secondary: "hsl(217.2 32.6% 17.5%)",
+          accent: "0a0a0a",
+          neutral: "hsl(222.2 47.4% 11.2%)",
+          "base-100": "#020202",
+          "base-content": "#ededed",
+          info: "hsl(217.2 91.2% 59.8%)",
+          success: "hsl(142.1 70.6% 45.3%)",
+          warning: "hsl(47.9 95.8% 53.1%)",
+          error: "hsl(346.8 77.2% 49.8%)",
+        },
+      },
+    ],
   },
-  darkMode: ["class"],
+
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
+  
   prefix: "",
   theme: {
     container: {

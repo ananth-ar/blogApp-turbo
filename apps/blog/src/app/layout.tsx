@@ -5,8 +5,8 @@ import NavBar from "../components/NavBar";
 import SearchBar from "../components/SearchBar";
 import AuthProvider from "../providers/AuthProvider";
 import ReactQueryProvider from "../providers/ReactQueryProvider";
-import { ThemeProvider } from "@/providers/ThemeProvider";
 import ClientThemeWrapper from "@/providers/ClientThemeWrapper";
+import { ThemeProvider } from "@/providers/ThemeContext";
 
 const inter = Inter({ subsets: ["latin"] });
 

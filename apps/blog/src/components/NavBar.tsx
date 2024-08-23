@@ -2,20 +2,22 @@
 
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { socket } from "../lib/service/socket";
 import { ToggleTheme } from "./ToggleTheme";
+import { ThemeContext } from "@/providers/ThemeContext";
 
 const NavBar = () => {
   const [notification, setNotification] = useState();
   const { status, data: session } = useSession();
+  const { changeTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     socket.on("avaliabeNotification", (data) => {
       console.log("avaliabeNotification ", data);
       setNotification(data);
     });
-  }, [ session]);
+  }, [session]);
 
   return (
     <div className="flex bg-slate-900 p-3 space-x-3">
@@ -27,9 +29,18 @@ const NavBar = () => {
           >
             sign out
           </a>
-          <Link href="/dashboard/notifications" className="text-cyan-50">
-            notifications {notification}
-          </Link>
+          <div className="indicator">
+            <Link href="/dashboard/notifications" className="text-cyan-50">
+              notifications
+              <span className="indicator-item badge h-4 bg-red-600 border-0 text-white text-xs">
+                {notification}
+              </span>
+            </Link>
+          </div>
+          {/* <span className="indicator-item badge badge-primary">new</span>
+          <div className="bg-base-300 grid h-2 w-20 place-items-center">
+            content
+          </div> */}
         </div>
       ) : (
         <Link className="text-zinc-200" href="/signin">
@@ -40,12 +51,12 @@ const NavBar = () => {
       <Link className="text-zinc-200" href="/editor">
         write
       </Link>
-      {/* <ToggleTheme/> */}
-      <input
+      <ToggleTheme handleOnClick={changeTheme} />
+      {/* <input
         type="checkbox"
-        value="synthwave"
+        value="cupcake"
         className="toggle theme-controller"
-      />
+      /> */}
     </div>
   );
 };

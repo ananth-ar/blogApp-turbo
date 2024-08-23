@@ -1,7 +1,6 @@
 "use client";
 import { createContext, useEffect, useState } from "react";
 
-
 interface ThemeContextType {
   theme?: string;
   changeTheme?: (nextTheme?: string) => void;
@@ -17,8 +16,9 @@ export const ThemeProvider = ({ children }: any) => {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  const changeTheme = (event?: any) => {
-    const nextTheme: string | null = event.target.value || null;
+  const changeTheme = (event: any) => {
+    console.log("theme change ", event);
+    const nextTheme: string | null = event || null;
     if (nextTheme) {
       setTheme(nextTheme);
     } else {
