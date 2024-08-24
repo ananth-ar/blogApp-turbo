@@ -49,6 +49,17 @@ export async function updateProfile(prevState: FormState, formData: FormData) {
   }
 }
 
+export async function userImg(username: string) {
+  return await prisma.user.findUnique({
+    where: { username },
+    select: {
+      image: true,
+    },
+  });
+}
+
+
+
 export async function userFollow(username: string, authorId: string) {
   try {
     const updatedUser = await prisma.user.update({

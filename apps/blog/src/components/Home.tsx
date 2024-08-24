@@ -2,7 +2,8 @@ import { prisma } from "database";
 import HomeBlogs from "./HomeBlogs";
 
 const Home = async () => {
-  //   await getPopularPosts();
+  // everything below works
+  await getPopularPosts();
   //   await getPopularTopics();
   //   await getRecentPosts(2);
   //   await getPopularUsers();
@@ -21,6 +22,13 @@ async function getPopularPosts() {
   const popularPosts = await prisma.post.findMany({
     select: {
       slug: true,
+      image: true,
+      title: true,
+      author: {
+        select: {
+          username: true,
+        },
+      },
       _count: {
         select: {
           comments: true,

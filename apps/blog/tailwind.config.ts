@@ -2,8 +2,13 @@ import type { Config } from "tailwindcss";
 import daisyui from "daisyui";
 const daisyuiColorObj = require("daisyui/src/theming/index");
 
-const config = {
+console.log(
+  "daisy ui variables ",
+  require("daisyui/src/theming/themes")["light"]
+);
 
+const config = {
+  darkMode: ["class", '[data-theme="dark"]'],
   daisyui: {
     themes: [
       {
@@ -19,6 +24,7 @@ const config = {
           success: "hsl(142.1 76.2% 36.3%)",
           warning: "hsl(48 96% 53%)",
           error: "hsl(346.8 77.2% 49.8%)",
+          sample: "blue",
         },
       },
       {
@@ -34,6 +40,7 @@ const config = {
           success: "hsl(142.1 70.6% 45.3%)",
           warning: "hsl(47.9 95.8% 53.1%)",
           error: "hsl(346.8 77.2% 49.8%)",
+          sample: "red",
         },
       },
     ],
@@ -45,7 +52,7 @@ const config = {
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
-  
+
   prefix: "",
   theme: {
     container: {
@@ -112,6 +119,7 @@ const config = {
     //   },
     // },
     extend: {
+      // mapping DaisyUI colors to Shadcn variables
       colors: {
         border: daisyuiColorObj["base-content"],
         input: daisyuiColorObj["base-content"],

@@ -28,7 +28,6 @@ export default function RootLayout({
             <ReactQueryProvider>
               <AuthProvider>
                 <NavBar />
-                <SearchBar />
                 {children}
               </AuthProvider>
             </ReactQueryProvider>

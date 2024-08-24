@@ -1,20 +1,4 @@
-import {
-  Cloud,
-  CreditCard,
-  Github,
-  Keyboard,
-  LifeBuoy,
-  LogOut,
-  Mail,
-  MessageSquare,
-  Plus,
-  PlusCircle,
-  Settings,
-  User,
-  UserPlus,
-  Users,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { CreditCard, LogOut, Settings, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,17 +10,28 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { useQuery } from "@tanstack/react-query";
+import { userImg } from "@/lib/actions/userActions";
 
 const ProfileDropDown = () => {
   const { data: session } = useSession();
 
+  const { data } = useQuery({
+    queryKey: ["profilepic"],
+    queryFn: () => userImg(session?.user.username!),
+  });
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">Open</Button>
+        <Avatar>
+          <AvatarImage src={data?.image!} alt="@shadcn" />
+          <AvatarFallback>{session?.user.username}</AvatarFallback>
+        </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>Name</DropdownMenuLabel>
+        <DropdownMenuLabel>{session?.user.username}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>

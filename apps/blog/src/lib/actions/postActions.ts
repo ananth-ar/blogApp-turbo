@@ -283,6 +283,13 @@ export async function getPopularPosts({ pageParam = 0 }) {
       skip: pageParam,
       select: {
         slug: true,
+        image: true,
+        title: true,
+        author: {
+          select: {
+            username: true,
+          },
+        },
         _count: {
           select: {
             comments: true,
