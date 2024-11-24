@@ -1,5 +1,7 @@
 blogApp(Medium clone) built this app while learning nextjs
 
+![Image Alt](https://github.com/ananth-ar/blogApp-turbo/blob/6237a192da1f2405ea241d5b96df7e4ecbdb32c0/apps/blog/blogscreenimage.png)
+
 # Turborepo starter
 
 This is an official starter Turborepo.
