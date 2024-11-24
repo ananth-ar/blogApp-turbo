@@ -1,3 +1,5 @@
+blogApp(Medium clone) built this app while learning nextjs
+
 # Turborepo starter
 
 This is an official starter Turborepo.
