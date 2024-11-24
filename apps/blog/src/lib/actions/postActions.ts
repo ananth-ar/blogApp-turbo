@@ -285,6 +285,8 @@ export async function getPopularPosts({ pageParam = 0 }) {
         slug: true,
         image: true,
         title: true,
+        createdAt: true,
+        content: true,
         author: {
           select: {
             username: true,
@@ -315,7 +317,7 @@ export async function getPopularPosts({ pageParam = 0 }) {
 
   const nextPage = posts.length === LIMIT ? pageParam + LIMIT : null;
 
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  await new Promise((resolve) => setTimeout(resolve, 100));
 
   return {
     data: posts,

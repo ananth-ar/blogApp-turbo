@@ -11,7 +11,6 @@ import ProfileDropDown from "./ProfileDropDown";
 import { Bell, SquarePen } from "lucide-react";
 import { Separator } from "./ui/separator";
 
-
 const NavBar = () => {
   const [notification, setNotification] = useState();
   const { status, data: session } = useSession();
@@ -32,11 +31,13 @@ const NavBar = () => {
         </div>
         <div className="flex justify-end w-[50%] mt-3 mb-2">
           <Link className="flex text-zinc-200 pt-2 px-4" href="/editor">
-            <span className="pr-2 text-gray-600 dark:text-white"> write</span>
+            <span className="pr-2 text-gray-500 dark:text-gray-100">
+              write
+            </span>
             <SquarePen
-              size={28}
-              strokeWidth={1.25}
-              className="text-gray-600 dark:text-white"
+              size={20}
+              strokeWidth={1}
+              className="text-gray-600 dark:text-gray-100"
             />
           </Link>
           {status === "authenticated" ? (
@@ -48,9 +49,10 @@ const NavBar = () => {
                     className="text-cyan-50"
                   >
                     <Bell
-                      size={28}
-                      strokeWidth={1.25}
-                      className="text-gray-600 dark:text-white"
+                      size={21}
+                      strokeWidth={1.2}
+                      absoluteStrokeWidth={false}
+                      className="text-gray-600 dark:text-gray-100"
                     />
 
                     {notification != 0 && (
@@ -61,7 +63,7 @@ const NavBar = () => {
                   </Link>
                 </div>
               </div>
-              <div className="px-4">
+              <div className="px-3 pt-[2px]">
                 <ProfileDropDown />
               </div>
             </div>
@@ -70,12 +72,12 @@ const NavBar = () => {
               sign in
             </Link>
           )}
-          <div className="px-3 pt-2">
+          <div className="pr-2">
             <ToggleTheme handleOnClick={changeTheme} />
           </div>
         </div>
       </div>
-      <Separator className="bg-slate-200 h-[0.5px]" />
+      <Separator className="bg-zinc-200 h-[0.5px]" />
     </div>
   );
 };

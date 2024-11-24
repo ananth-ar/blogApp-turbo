@@ -25,7 +25,7 @@ const ProfileDropDown = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar>
+        <Avatar className="w-8 h-8">
           <AvatarImage src={data?.image!} alt="@shadcn" />
           <AvatarFallback>{session?.user.username}</AvatarFallback>
         </Avatar>

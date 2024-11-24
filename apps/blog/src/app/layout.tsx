@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NavBar from "../components/NavBar";
-import SearchBar from "../components/SearchBar";
 import AuthProvider from "../providers/AuthProvider";
 import ReactQueryProvider from "../providers/ReactQueryProvider";
 import ClientThemeWrapper from "@/providers/ClientThemeWrapper";
@@ -37,3 +36,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+

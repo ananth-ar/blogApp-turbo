@@ -16,7 +16,7 @@ const SearchBar = () => {
     <form className="flex m-2 ml-5" onSubmit={handleSubmit}>
       <label
         className="input flex items-center gap-2 bg-gray-100 dark:bg-muted text-base-content rounded-[1.5rem] 
-           focus-within:outline-none focus-within:ring-0 focus-within:border-transparent"
+           focus-within:outline-none focus-within:ring-0 focus-within:border-transparent h-[2.5rem]"
       >
         <input
           className="bg-transparent border-none focus:ring-0 focus:outline-none w-full"
